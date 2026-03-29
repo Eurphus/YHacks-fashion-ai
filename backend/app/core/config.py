@@ -24,6 +24,7 @@ class Settings(BaseSettings):
 
     # Storage
     jobs_dir: str = "./jobs"
+    sessions_dir: str = "./sessions"
 
     # Logging
     log_level: str = "INFO"

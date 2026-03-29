@@ -86,6 +86,26 @@ export interface ProcessVideoResult {
 
 // ── API call ──────────────────────────────────────────────────────────────────
 
+const SESSION_STORAGE_KEY = "fashionai_generation_session_id";
+
+function getOrCreateGenerationSessionId(): string {
+  if (typeof window === "undefined") {
+    return "server-session";
+  }
+
+  const existing = window.localStorage.getItem(SESSION_STORAGE_KEY);
+  if (existing) {
+    return existing;
+  }
+
+  const created =
+    typeof window.crypto?.randomUUID === "function"
+      ? window.crypto.randomUUID()
+      : `session_${Date.now()}`;
+  window.localStorage.setItem(SESSION_STORAGE_KEY, created);
+  return created;
+}
+
 /**
  * processVideoMutation
  *
@@ -116,13 +136,17 @@ export async function processVideoMutation(
   // Field names must match the FastAPI route parameter names exactly:
   //   video  → UploadFile  (File(...))
   //   prompt → str         (Form(...))
+  //   session_id → optional stable identifier for prompt/history reuse
   const body = new FormData();
+  const sessionId = getOrCreateGenerationSessionId();
   body.append("video", blob, "recording.webm");
   body.append("prompt", prompt);
+  body.append("session_id", sessionId);
 
   console.info(
     "[FashionAI] Submitting to backend…",
     `\n  endpoint  : ${endpoint}`,
+    `\n  session   : ${sessionId}`,
     `\n  blob size : ${(blob.size / 1024).toFixed(1)} KB`,
     `\n  mime type : ${blob.type || "unknown"}`,
     `\n  prompt    : "${prompt}"`,

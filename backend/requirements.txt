@@ -22,3 +22,6 @@ Pillow>=11.0.0
 
 # Numerical arrays (frame representation)
 numpy>=1.26.0
+
+# Retrieval / intent parsing helper used by garment_search
+requests>=2.32.0

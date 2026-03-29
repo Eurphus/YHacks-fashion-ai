@@ -16,6 +16,8 @@ env/
 # Runtime job artefacts (can be large; regenerated on demand)
 jobs/
 !jobs/.gitkeep
+sessions/
+!sessions/.gitkeep
 
 # Distribution
 dist/

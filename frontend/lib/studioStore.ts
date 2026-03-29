@@ -68,6 +68,9 @@ export interface StudioActions {
   // Called when the user submits the command bar
   startProcessing: () => void;
 
+  // Called when backend generation fails and the user should return to review
+  processingFailed: () => void;
+
   // Called when processVideoMutation resolves with the AI video URL
   revealAiVideo: (url: string) => void;
 
@@ -179,6 +182,11 @@ export const useStudioStore = create<StudioStore>((set, get) => ({
   // ── startProcessing ─────────────────────────────────────────────────────────
   startProcessing: () => {
     set({ phase: "processing" });
+  },
+
+  // ── processingFailed ────────────────────────────────────────────────────────
+  processingFailed: () => {
+    set({ phase: "review" });
   },
 
   // ── revealAiVideo ───────────────────────────────────────────────────────────

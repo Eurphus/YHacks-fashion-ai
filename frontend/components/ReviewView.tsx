@@ -26,10 +26,10 @@ import clsx from "clsx";
 // ── Processing step descriptions ──────────────────────────────────────────────
 
 const PROCESSING_STEPS = [
-  "Analyzing outfit structure…",
-  "Extracting garment boundaries…",
-  "Applying style transfer…",
-  "Rendering final output…",
+  "Reviewing your outfit…",
+  "Picking the new look…",
+  "Applying the style update…",
+  "Preparing your final video…",
 ] as const;
 
 // ── Component ──────────────────────────────────────────────────────────────────
@@ -44,6 +44,7 @@ export default function ReviewView() {
   const aiVideoPlaying = useStudioStore((s) => s.aiVideoPlaying);
   const setPrompt = useStudioStore((s) => s.setPrompt);
   const startProcessing = useStudioStore((s) => s.startProcessing);
+  const processingFailed = useStudioStore((s) => s.processingFailed);
   const revealAiVideo = useStudioStore((s) => s.revealAiVideo);
   const toggleAiPlayback = useStudioStore((s) => s.toggleAiPlayback);
   const retake = useStudioStore((s) => s.retake);
@@ -67,6 +68,7 @@ export default function ReviewView() {
   const [swapped, setSwapped] = useState(false);
   const [inputFocused, setInputFocused] = useState(false);
   const [stepIdx, setStepIdx] = useState(0);
+  const [generationError, setGenerationError] = useState<string | null>(null);
 
   const promptTrimmed = prompt.trim();
   const canSubmit = promptTrimmed.length > 0 && phase === "review";
@@ -104,6 +106,7 @@ export default function ReviewView() {
     if (phase === "review") {
       swapDoneRef.current = false;
       setSwapped(false);
+      setGenerationError(null);
     }
   }, [phase]);
 
@@ -183,6 +186,7 @@ export default function ReviewView() {
   const handleGenerate = useCallback(async () => {
     if (!canSubmit || !recordedBlob) return;
 
+    setGenerationError(null);
     startProcessing();
 
     try {
@@ -190,11 +194,21 @@ export default function ReviewView() {
       revealAiVideo(result.outputUrl);
     } catch (err) {
       console.error("[FashionAI] processVideoMutation failed:", err);
-      revealAiVideo(
-        "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerFun.mp4",
+      setGenerationError(
+        err instanceof Error
+          ? err.message
+          : "We couldn't process your look right now. Please try again.",
       );
+      processingFailed();
     }
-  }, [canSubmit, recordedBlob, promptTrimmed, startProcessing, revealAiVideo]);
+  }, [
+    canSubmit,
+    recordedBlob,
+    promptTrimmed,
+    processingFailed,
+    startProcessing,
+    revealAiVideo,
+  ]);
 
   const handleKeyDown = useCallback(
     (e: KeyboardEvent<HTMLInputElement>) => {
@@ -383,55 +397,63 @@ export default function ReviewView() {
           >
             {/* ── REVIEW: prompt input + Generate button ────────────── */}
             {phase === "review" && (
-              <div className="flex items-center gap-3">
-                <div className="relative flex-1">
-                  <input
-                    type="text"
-                    value={prompt}
-                    onChange={(e) => setPrompt(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    onFocus={() => setInputFocused(true)}
-                    onBlur={() => setInputFocused(false)}
-                    placeholder="e.g., Make my shirt a vintage denim jacket..."
-                    aria-label="Style prompt"
-                    className={clsx(
-                      "w-full bg-[#17171d] hover:bg-[#1b1b22] focus:bg-[#1b1b22]",
-                      "border border-white/12 focus:border-purple-500/60",
-                      "rounded-xl px-4 py-3",
-                      "text-white placeholder-white/30 text-sm",
-                      "outline-none transition-all duration-200 caret-purple-400",
-                    )}
-                    autoFocus
-                    spellCheck={false}
-                    autoComplete="off"
-                  />
-                </div>
+              <div className="flex flex-col gap-3">
+                {generationError && (
+                  <div className="rounded-xl border border-red-500/25 bg-red-500/10 px-4 py-3 text-sm leading-6 text-red-100">
+                    {generationError}
+                  </div>
+                )}
 
-                <button
-                  onClick={handleGenerate}
-                  disabled={!canSubmit}
-                  aria-label="Generate AI look"
-                  className={clsx(
-                    "flex-shrink-0 flex items-center gap-2",
-                    "px-5 py-3 rounded-xl text-sm font-semibold text-white",
-                    "transition-all duration-200",
-                    canSubmit
-                      ? [
-                          "bg-gradient-to-r from-purple-600 to-pink-600",
-                          "hover:from-purple-500 hover:to-pink-500",
-                          "shadow-[0_4px_16px_rgba(168,85,247,0.4)]",
-                          "hover:shadow-[0_4px_24px_rgba(168,85,247,0.6)]",
-                          "active:scale-95",
-                        ]
-                      : ["bg-white/10 text-white/30 cursor-not-allowed"],
-                  )}
-                >
-                  <Sparkles
-                    className="w-4 h-4 flex-shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span>Generate</span>
-                </button>
+                <div className="flex items-center gap-3">
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      value={prompt}
+                      onChange={(e) => setPrompt(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      onFocus={() => setInputFocused(true)}
+                      onBlur={() => setInputFocused(false)}
+                      placeholder="e.g., Make my shirt a vintage denim jacket..."
+                      aria-label="Style prompt"
+                      className={clsx(
+                        "w-full bg-[#17171d] hover:bg-[#1b1b22] focus:bg-[#1b1b22]",
+                        "border border-white/12 focus:border-purple-500/60",
+                        "rounded-xl px-4 py-3",
+                        "text-white placeholder-white/30 text-sm",
+                        "outline-none transition-all duration-200 caret-purple-400",
+                      )}
+                      autoFocus
+                      spellCheck={false}
+                      autoComplete="off"
+                    />
+                  </div>
+
+                  <button
+                    onClick={handleGenerate}
+                    disabled={!canSubmit}
+                    aria-label="Generate AI look"
+                    className={clsx(
+                      "flex-shrink-0 flex items-center gap-2",
+                      "px-5 py-3 rounded-xl text-sm font-semibold text-white",
+                      "transition-all duration-200",
+                      canSubmit
+                        ? [
+                            "bg-gradient-to-r from-purple-600 to-pink-600",
+                            "hover:from-purple-500 hover:to-pink-500",
+                            "shadow-[0_4px_16px_rgba(168,85,247,0.4)]",
+                            "hover:shadow-[0_4px_24px_rgba(168,85,247,0.6)]",
+                            "active:scale-95",
+                          ]
+                        : ["bg-white/10 text-white/30 cursor-not-allowed"],
+                    )}
+                  >
+                    <Sparkles
+                      className="w-4 h-4 flex-shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>Generate</span>
+                  </button>
+                </div>
               </div>
             )}
 
@@ -446,12 +468,9 @@ export default function ReviewView() {
                       aria-hidden="true"
                     />
                     <span className="text-white/80 text-sm font-medium">
-                      FashionAI is designing your look…
+                      FashionAI is styling your look…
                     </span>
                   </div>
-                  <span className="text-white/25 text-xs font-mono hidden sm:block flex-shrink-0">
-                    diffusion · v0.1
-                  </span>
                 </div>
 
                 {/* Animated step description — cycles every 2 s */}
@@ -550,17 +569,14 @@ export default function ReviewView() {
                 <div className="flex flex-col gap-1.5">
                   <p className="text-white/50 text-xs leading-relaxed">
                     <span className="text-purple-400/90 font-medium">
-                      🎨 Style transfer applied —{" "}
+                      Your new look is ready —{" "}
                     </span>
-                    Clothing regions were segmented frame-by-frame and their
-                    texture + silhouette data extracted. A diffusion model then
-                    re-synthesised each garment&apos;s appearance using your
-                    prompt as a style guide, while preserving body geometry and
-                    scene background.
+                    we refreshed the outfit in your clip based on the style
+                    direction you gave, while keeping your movement and overall
+                    scene intact.
                   </p>
                   <p className="text-white/20 text-[10px] font-mono tracking-wide">
-                    fashionai-diffusion-v0.1-mock · click video to toggle
-                    playback
+                    Click the video to toggle playback
                   </p>
                 </div>
               </div>

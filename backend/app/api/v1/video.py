@@ -52,6 +52,12 @@ async def process_video(
             description="Natural-language style instruction.",
         ),
     ],
+    session_id: Annotated[
+        str | None,
+        Form(
+            description="Stable frontend session identifier used to reuse garment-search history.",
+        ),
+    ] = None,
 ) -> VideoProcessResponse:
     # ── Create an isolated working directory for this job ────────────────────
     job_id = str(uuid.uuid4())
@@ -86,6 +92,7 @@ async def process_video(
             input_path,
             job_dir,
             prompt,
+            session_id,
         )
     except RuntimeError as exc:
         logger.error("Job %s | pipeline failed: %s", job_id, exc)

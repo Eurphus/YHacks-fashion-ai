@@ -21,6 +21,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 JOBS_DIR = Path(settings.jobs_dir)
+SESSIONS_DIR = Path(settings.sessions_dir)
 
 
 # ---------------------------------------------------------------------------
@@ -31,8 +32,10 @@ JOBS_DIR = Path(settings.jobs_dir)
 async def lifespan(app: FastAPI):
     # Startup
     JOBS_DIR.mkdir(parents=True, exist_ok=True)
+    SESSIONS_DIR.mkdir(parents=True, exist_ok=True)
     logger.info("FashionAI backend started.")
     logger.info("  jobs dir  : %s", JOBS_DIR.resolve())
+    logger.info("  sessions  : %s", SESSIONS_DIR.resolve())
     logger.info("  CORS      : %s", settings.cors_origins)
     logger.info("  docs      : http://%s:%s/docs", settings.host, settings.port)
     yield

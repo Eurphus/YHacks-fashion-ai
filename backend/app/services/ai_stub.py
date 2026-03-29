@@ -37,6 +37,7 @@ def process_frame(
     image: Image.Image,
     prompt: str,
     frame_index: int,
+    context: dict | None = None,
 ) -> Image.Image:
     # Apply AI style transfer to a single video frame.
     #
@@ -47,6 +48,14 @@ def process_frame(
     #
     # Returns:
     #   Processed frame as a Pillow RGB Image with identical spatial dimensions.
+
+    if context and frame_index == 0:
+        logger.info(
+            "AI stub received request context | session=%s | photo=%s | garments=%d",
+            context.get("session_id"),
+            context.get("reference_photo_path"),
+            len(context.get("selected_garments", [])),
+        )
 
     logger.debug("frame %05d | stub identity transform | prompt=%.40s", frame_index, prompt)
 

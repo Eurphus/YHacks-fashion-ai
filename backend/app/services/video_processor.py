@@ -29,6 +29,7 @@ import numpy as np
 from PIL import Image
 
 from app.services.ai_stub import process_frame
+from app.services.garment_context import build_generation_context
 
 logger = logging.getLogger(__name__)
 
@@ -163,6 +164,7 @@ def _process_frames(
     raw_frames: list[np.ndarray],
     out_dir: Path,
     prompt: str,
+    generation_context: dict | None = None,
 ) -> list[np.ndarray]:
     # Run each raw frame through the AI stub and persist the results.
     #
@@ -173,7 +175,7 @@ def _process_frames(
 
     for i, frame in enumerate(raw_frames):
         pil_in  = _ndarray_to_pil(frame)
-        pil_out = process_frame(pil_in, prompt, i)
+        pil_out = process_frame(pil_in, prompt, i, generation_context)
 
         # Ensure the output image has the same spatial dimensions as the input.
         # A real model should honour this contract; we enforce it defensively.
@@ -230,6 +232,7 @@ def run_pipeline(
     input_path: Path,
     job_dir: Path,
     prompt: str,
+    session_id: str | None = None,
 ) -> dict:
     # Execute the full video-processing pipeline synchronously.
     #
@@ -260,11 +263,22 @@ def run_pipeline(
     # 2. Archive raw frames (useful for debugging / QA)
     _save_frames(raw_frames, job_dir / "frames_raw", "raw")
 
+    # Build the AI request from prompt + representative input photo + retrieved garments.
+    reference_frame_path = job_dir / "reference_photo.jpg"
+    _ndarray_to_pil(raw_frames[len(raw_frames) // 2]).save(reference_frame_path, format="JPEG", quality=95)
+    generation_context = build_generation_context(
+        prompt=prompt,
+        session_id=session_id,
+        reference_photo_path=reference_frame_path,
+        job_dir=job_dir,
+    )
+
     # 3 & 4. Process and archive
     processed_frames = _process_frames(
         raw_frames,
         job_dir / "frames_processed",
-        prompt,
+        generation_context["effective_prompt"],
+        generation_context,
     )
 
     # 5. Stitch
@@ -279,4 +293,7 @@ def run_pipeline(
         "height":           height,
         "duration_s":       len(raw_frames) / fps,
         "output_path":      str(output_path),
+        "session_id":       generation_context["session_id"],
+        "effective_prompt": generation_context["effective_prompt"],
+        "selected_garments": generation_context["selected_garments"],
     }
