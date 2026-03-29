@@ -1,0 +1,27 @@
+# FashionAI Backend — Python dependencies
+# Install with:  pip install -r requirements.txt
+
+# Web framework
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+
+# Validation
+pydantic>=2.9.0
+pydantic-settings>=2.6.0
+
+# File uploads
+python-multipart>=0.0.12
+
+# Video I/O — imageio-ffmpeg bundles a static FFmpeg binary.
+# No system-level FFmpeg installation required.
+imageio>=2.36.0
+imageio-ffmpeg>=0.5.1
+
+# Image processing (per-frame AI stub)
+Pillow>=11.0.0
+
+# Numerical arrays (frame representation)
+numpy>=1.26.0
+
+# Retrieval / intent parsing helper used by garment_search
+requests>=2.32.0
