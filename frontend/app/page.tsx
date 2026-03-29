@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 
@@ -47,30 +47,39 @@ const pillars = [
   },
 ];
 
+const programNotes = [
+  {
+    title: "For stylists and creative teams",
+    body: "Move from mood to motion quickly when you need to test a direction, sell a concept, or explore a sharper point of view.",
+  },
+  {
+    title: "For personal experimentation",
+    body: "Try a new silhouette or energy before committing to a purchase, a shoot, or a full styling change.",
+  },
+  {
+    title: "For iterative sessions",
+    body: "Capture once, refine with better prompts, and keep reviewing until the direction feels right.",
+  },
+];
+
+const closingStats = [
+  { value: "5 sec", label: "guided recording window" },
+  { value: "1 flow", label: "record, direct, review" },
+  { value: "0 friction", label: "no setup once you enter" },
+];
+
 export default function RootPage() {
   const router = useRouter();
   const { isAuthenticated, login, user } = useUser();
   const [isLoggingIn, setIsLoggingIn] = useState(false);
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.replace("/studio");
-    }
-  }, [isAuthenticated, router]);
-
   const handleLogin = () => {
     setIsLoggingIn(true);
-    login();
+    if (!isAuthenticated) {
+      login();
+    }
     router.push("/studio");
   };
-
-  if (isAuthenticated) {
-    return (
-      <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
-        <div className="h-10 w-10 rounded-full border-2 border-white/20 border-t-white animate-spin" />
-      </div>
-    );
-  }
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--background)] px-6 py-10 sm:px-8 lg:px-12">
@@ -146,7 +155,7 @@ export default function RootPage() {
             </div>
 
             <div className="mt-8 inline-flex w-fit items-center rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/60">
-              Personal styling, directed in motion
+              Record your look, direct the style, and watch it transform in motion
             </div>
 
             <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
@@ -265,17 +274,20 @@ export default function RootPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/35">
-                    Welcome back
+                    {isAuthenticated ? "Studio ready" : "Welcome"}
                   </p>
                   <h2 className="mt-3 text-2xl font-semibold text-white">
-                    Enter FashionAI Studio
+                    {isAuthenticated
+                      ? "Open FashionAI Studio"
+                      : "Enter FashionAI Studio"}
                   </h2>
                 </div>
               </div>
 
               <p className="mt-4 text-sm leading-7 text-white/45">
-                Your workspace is ready. Continue into the camera studio to
-                record, direct, and review a new look in one pass.
+                {isAuthenticated
+                  ? "Your session is already active. Jump back into the camera studio whenever you're ready."
+                  : "Your workspace is ready. Continue into the camera studio to record, direct, and review a new look in one pass."}
               </p>
 
               <div
@@ -407,7 +419,7 @@ export default function RootPage() {
                       <path d="m21 2-9.6 9.6" />
                       <path d="m15.5 7.5 3 3L22 7l-3-3" />
                     </svg>
-                    <span>Continue as Peter</span>
+                    <span>{isAuthenticated ? "Open Studio" : "Continue as Peter"}</span>
                   </>
                 )}
               </button>
@@ -420,6 +432,78 @@ export default function RootPage() {
             </div>
           </section>
         </div>
+      </div>
+
+      <div className="relative z-10 mx-auto mt-12 w-full max-w-7xl">
+        <section className="rounded-[36px] border border-white/10 bg-[linear-gradient(180deg,rgba(9,12,20,0.92),rgba(13,16,26,0.82))] px-6 py-8 sm:px-8 sm:py-10 lg:px-10">
+          <div className="grid gap-8 lg:grid-cols-[1.05fr_0.95fr] lg:items-end">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/36">
+                Inside the program
+              </p>
+              <h2 className="mt-4 max-w-2xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
+                A fashion tool that feels more like a creative session than a
+                technical workflow.
+              </h2>
+              <p className="mt-5 max-w-2xl text-sm leading-7 text-white/52 sm:text-base">
+                FashionAI is built to keep momentum high. You enter, record one
+                clean clip, describe the direction you want, and immediately see
+                the result in the same space. No dashboard maze, no extra setup,
+                no disconnected steps.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-3 gap-3">
+              {closingStats.map(({ value, label }) => (
+                <div
+                  key={label}
+                  className="rounded-[24px] border border-white/10 bg-white/[0.05] px-4 py-5 text-center"
+                >
+                  <p className="text-2xl font-semibold text-white">{value}</p>
+                  <p className="mt-2 text-xs uppercase tracking-[0.18em] text-white/38">
+                    {label}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="mt-8 grid gap-4 lg:grid-cols-3">
+            {programNotes.map(({ title, body }) => (
+              <div
+                key={title}
+                className="rounded-[26px] border border-white/8 bg-black/20 p-5"
+              >
+                <p className="text-sm font-semibold text-white">{title}</p>
+                <p className="mt-3 text-sm leading-6 text-white/48">{body}</p>
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-8 flex flex-col gap-4 rounded-[28px] border border-white/10 bg-[linear-gradient(135deg,rgba(236,106,79,0.14),rgba(217,106,167,0.12),rgba(29,94,141,0.14))] p-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/40">
+                Ready to enter
+              </p>
+              <p className="mt-3 max-w-xl text-sm leading-7 text-white/58 sm:text-base">
+                Record your look, direct the style, and review the result in one
+                continuous studio pass.
+              </p>
+            </div>
+
+            <button
+              onClick={handleLogin}
+              disabled={isLoggingIn}
+              className="rounded-2xl border border-white/12 bg-white/[0.08] px-5 py-3 text-sm font-semibold text-white transition hover:bg-white/[0.12] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {isLoggingIn
+                ? "Opening Studio..."
+                : isAuthenticated
+                  ? "Open Studio"
+                  : "Start Session"}
+            </button>
+          </div>
+        </section>
       </div>
     </div>
   );
