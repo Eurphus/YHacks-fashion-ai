@@ -275,6 +275,7 @@ export default function ReviewView() {
             onClick={isReveal && swapped ? toggleAiPlayback : undefined}
             className={clsx(
               "absolute inset-0 w-full h-full object-cover",
+              "scale-x-[-1]",
               swapped ? "opacity-100 video-reveal" : "opacity-0",
               "transition-opacity duration-150",
               // Indicate the video is interactive after the swap
@@ -394,8 +395,8 @@ export default function ReviewView() {
                     placeholder="e.g., Make my shirt a vintage denim jacket..."
                     aria-label="Style prompt"
                     className={clsx(
-                      "w-full bg-white/5 hover:bg-white/[0.08] focus:bg-white/10",
-                      "border border-white/10 focus:border-purple-500/60",
+                      "w-full bg-[#17171d] hover:bg-[#1b1b22] focus:bg-[#1b1b22]",
+                      "border border-white/12 focus:border-purple-500/60",
                       "rounded-xl px-4 py-3",
                       "text-white placeholder-white/30 text-sm",
                       "outline-none transition-all duration-200 caret-purple-400",

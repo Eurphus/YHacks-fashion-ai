@@ -1,0 +1,33 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.so
+
+# Virtual environments
+.venv/
+venv/
+env/
+
+# Environment — never commit secrets
+.env
+
+# Runtime job artefacts (can be large; regenerated on demand)
+jobs/
+!jobs/.gitkeep
+
+# Distribution
+dist/
+build/
+*.egg-info/
+
+# Editors
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
