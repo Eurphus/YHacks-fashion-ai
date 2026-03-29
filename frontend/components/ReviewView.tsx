@@ -552,33 +552,6 @@ export default function ReviewView() {
                   </button>
                 </div>
 
-                {/* ── Divider ── */}
-                <div className="h-px bg-white/[0.07]" aria-hidden="true" />
-
-                {/* ── Filter / transformation description ── */}
-                {/*
-                  What the AI actually did:
-                  1. The recorded frames were segmented to isolate clothing regions
-                     from the background and body geometry.
-                  2. Texture, colour, and silhouette data were extracted per-garment.
-                  3. A diffusion model applied style conditioning guided by the prompt,
-                     re-synthesising the garment appearance while keeping the body pose
-                     and scene context intact.
-                  4. The output frames were composited back at the original resolution.
-                */}
-                <div className="flex flex-col gap-1.5">
-                  <p className="text-white/50 text-xs leading-relaxed">
-                    <span className="text-purple-400/90 font-medium">
-                      Your new look is ready —{" "}
-                    </span>
-                    we refreshed the outfit in your clip based on the style
-                    direction you gave, while keeping your movement and overall
-                    scene intact.
-                  </p>
-                  <p className="text-white/20 text-[10px] font-mono tracking-wide">
-                    Click the video to toggle playback
-                  </p>
-                </div>
               </div>
             )}
           </div>

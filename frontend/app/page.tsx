@@ -4,6 +4,49 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useUser } from "@/context/UserContext";
 
+const journey = [
+  {
+    title: "Capture",
+    body: "Record a clean five-second look in the studio with framing built for full-outfit shots.",
+  },
+  {
+    title: "Direct",
+    body: "Describe the silhouette, palette, mood, or references you want to explore in plain language.",
+  },
+  {
+    title: "Review",
+    body: "See the updated motion clip, compare the direction, and quickly retake or refine.",
+  },
+];
+
+const highlights = [
+  "Camera-guided recording",
+  "Prompt-led outfit direction",
+  "Motion-preserving previews",
+  "Fast review and retake flow",
+];
+
+const useCases = [
+  "Try a sharper editorial direction before a shoot.",
+  "Prototype wardrobe ideas without changing on camera.",
+  "Pitch styling concepts with motion instead of static mockups.",
+];
+
+const pillars = [
+  {
+    label: "Studio Workflow",
+    value: "One focused space for recording, prompting, and reviewing.",
+  },
+  {
+    label: "Visual Consistency",
+    value: "Keeps the scene and movement intact while the look changes.",
+  },
+  {
+    label: "Creative Control",
+    value: "Use natural language to push toward tailored, casual, dramatic, or minimal directions.",
+  },
+];
+
 export default function RootPage() {
   const router = useRouter();
   const { isAuthenticated, login, user } = useUser();
@@ -24,33 +67,35 @@ export default function RootPage() {
   if (isAuthenticated) {
     return (
       <div className="min-h-screen bg-[var(--background)] flex items-center justify-center">
-        <div className="w-10 h-10 rounded-full border-2 border-purple-500/40 border-t-purple-400 animate-spin" />
+        <div className="h-10 w-10 rounded-full border-2 border-white/20 border-t-white animate-spin" />
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-[var(--background)] relative overflow-hidden px-6 py-10 sm:px-8 lg:px-12">
+    <div className="relative min-h-screen overflow-hidden bg-[var(--background)] px-6 py-10 sm:px-8 lg:px-12">
       <div
-        className="absolute top-[-20%] left-[-10%] w-[600px] h-[600px] rounded-full opacity-20 blur-[120px] pointer-events-none"
+        className="pointer-events-none absolute left-[-8%] top-[-14%] h-[620px] w-[620px] rounded-full opacity-30 blur-[130px]"
         style={{
           background:
-            "radial-gradient(circle, #a855f7 0%, #7c3aed 50%, transparent 70%)",
+            "radial-gradient(circle, rgba(232, 104, 79, 0.85) 0%, rgba(165, 41, 91, 0.55) 48%, transparent 72%)",
         }}
         aria-hidden="true"
       />
       <div
-        className="absolute bottom-[-20%] right-[-10%] w-[500px] h-[500px] rounded-full opacity-15 blur-[100px] pointer-events-none"
+        className="pointer-events-none absolute bottom-[-18%] right-[-10%] h-[520px] w-[520px] rounded-full opacity-30 blur-[110px]"
         style={{
           background:
-            "radial-gradient(circle, #ec4899 0%, #db2777 50%, transparent 70%)",
+            "radial-gradient(circle, rgba(35, 113, 161, 0.8) 0%, rgba(19, 42, 88, 0.58) 48%, transparent 72%)",
         }}
         aria-hidden="true"
       />
       <div
-        className="absolute top-[40%] right-[20%] w-[300px] h-[300px] rounded-full opacity-10 blur-[80px] pointer-events-none"
+        className="pointer-events-none absolute inset-0 opacity-30"
         style={{
-          background: "radial-gradient(circle, #f97316 0%, transparent 70%)",
+          background:
+            "linear-gradient(180deg, rgba(255,255,255,0.05) 0%, transparent 32%), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(180deg, rgba(255,255,255,0.03) 1px, transparent 1px)",
+          backgroundSize: "100% 100%, 72px 72px, 72px 72px",
         }}
         aria-hidden="true"
       />
@@ -60,10 +105,10 @@ export default function RootPage() {
           <section className="animate-fade-in">
             <div className="flex items-center gap-3">
               <div
-                className="w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg"
+                className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
                 style={{
                   background:
-                    "linear-gradient(135deg, #a855f7 0%, #ec4899 60%, #f97316 100%)",
+                    "linear-gradient(135deg, #ec6a4f 0%, #be3e77 48%, #1d5e8d 100%)",
                 }}
                 aria-hidden="true"
               >
@@ -74,7 +119,7 @@ export default function RootPage() {
                   strokeWidth={1.75}
                   strokeLinecap="round"
                   strokeLinejoin="round"
-                  className="w-6 h-6"
+                  className="h-6 w-6"
                   aria-hidden="true"
                 >
                   <path d="M12 3a2 2 0 0 1 2 2c0 .74-.4 1.38-1 1.73V8l8 6H3l8-6V6.73A2 2 0 0 1 12 3z" />
@@ -87,93 +132,129 @@ export default function RootPage() {
                   className="text-2xl font-bold tracking-tight leading-none"
                   style={{
                     background:
-                      "linear-gradient(90deg, #a855f7 0%, #ec4899 55%, #f97316 100%)",
+                      "linear-gradient(90deg, #ffd7b3 0%, #ff9f7b 28%, #d96aa7 65%, #7ec5ff 100%)",
                     WebkitBackgroundClip: "text",
                     WebkitTextFillColor: "transparent",
                   }}
                 >
                   FashionAI
                 </span>
-                <span className="text-[10px] font-semibold tracking-[0.2em] text-white/30 uppercase mt-0.5">
+                <span className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.2em] text-white/30">
                   Studio
                 </span>
               </div>
             </div>
 
-            <div className="mt-8 inline-flex w-fit items-center rounded-full border border-white/10 bg-white/5 px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/55">
-              Welcome to the private beta
+            <div className="mt-8 inline-flex w-fit items-center rounded-full border border-white/10 bg-white/[0.06] px-4 py-2 text-xs font-semibold uppercase tracking-[0.22em] text-white/60">
+              Personal styling, directed in motion
             </div>
 
             <h1 className="mt-6 max-w-3xl text-4xl font-bold leading-tight text-white sm:text-5xl lg:text-6xl">
-              Walk in, record your look, and{" "}
+              Step into the studio, shape a new wardrobe direction, and{" "}
               <span
                 style={{
                   background:
-                    "linear-gradient(90deg, #a855f7 0%, #ec4899 55%, #f97316 100%)",
+                    "linear-gradient(90deg, #ffd7b3 0%, #ff9f7b 28%, #d96aa7 65%, #7ec5ff 100%)",
                   WebkitBackgroundClip: "text",
                   WebkitTextFillColor: "transparent",
                 }}
               >
-                explore a new style direction
+                watch the look evolve on your clip
               </span>
               .
             </h1>
 
             <p className="mt-6 max-w-2xl text-base leading-8 text-white/55 sm:text-lg">
-              FashionAI Studio is a guided outfit transformation experience.
-              Capture a short clip, describe the vibe you want, and step through
-              a fast before-and-after reveal built for fashion experimentation.
+              FashionAI Studio turns a short outfit recording into a guided
+              styling session. Capture your look, describe the direction you
+              want, and review a refreshed version of the same moment without
+              leaving the flow.
             </p>
 
-            <div className="mt-10 grid gap-4 sm:grid-cols-3">
-              {[
-                {
-                  title: "Record",
-                  body: "Use the camera studio to capture a clean, full-outfit moment.",
-                },
-                {
-                  title: "Prompt",
-                  body: "Describe the materials, silhouette, or energy you want to try.",
-                },
-                {
-                  title: "Reveal",
-                  body: "Review the transformed motion clip and retake whenever you want.",
-                },
-              ].map(({ title, body }) => (
+            <div className="mt-10 flex flex-wrap gap-3">
+              {highlights.map((label) => (
                 <div
-                  key={title}
-                  className="rounded-2xl border border-white/10 bg-white/[0.06] p-5"
+                  key={label}
+                  className="flex items-center gap-2 rounded-full border border-white/10 bg-white/[0.06] px-4 py-2"
                 >
-                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/70">
-                    {title}
-                  </p>
-                  <p className="mt-3 text-sm leading-6 text-white/42">{body}</p>
+                  <span
+                    className="h-2 w-2 rounded-full"
+                    style={{
+                      background:
+                        "linear-gradient(135deg, #ff9f7b 0%, #d96aa7 60%, #7ec5ff 100%)",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <span className="text-xs font-medium text-white/70">
+                    {label}
+                  </span>
                 </div>
               ))}
             </div>
 
-            <div className="mt-10 flex flex-wrap gap-3">
-              {[
-                "Camera-guided capture",
-                "Prompt-based styling",
-                "Instant studio review",
-              ].map((label) => (
+            <div className="mt-10 grid gap-4 sm:grid-cols-3">
+              {journey.map(({ title, body }) => (
                 <div
-                  key={label}
-                  className="glass flex items-center gap-1.5 rounded-full px-4 py-2"
+                  key={title}
+                  className="rounded-[24px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.11),rgba(255,255,255,0.04))] p-5"
                 >
-                  <span className="h-2 w-2 rounded-full bg-purple-400" aria-hidden="true" />
-                  <span className="text-xs font-medium text-white/55">{label}</span>
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-white/72">
+                    {title}
+                  </p>
+                  <p className="mt-3 text-sm leading-6 text-white/46">{body}</p>
                 </div>
               ))}
+            </div>
+
+            <div className="mt-10 grid gap-5 lg:grid-cols-[0.95fr_1.05fr]">
+              <div className="rounded-[28px] border border-white/10 bg-[#11131b]/85 p-6 shadow-[0_18px_60px_rgba(0,0,0,0.28)]">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/40">
+                  Why teams use it
+                </p>
+                <div className="mt-5 space-y-4">
+                  {useCases.map((item) => (
+                    <div key={item} className="flex gap-3">
+                      <span
+                        className="mt-2 h-2 w-2 flex-none rounded-full"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #ff9f7b 0%, #d96aa7 55%, #7ec5ff 100%)",
+                        }}
+                        aria-hidden="true"
+                      />
+                      <p className="text-sm leading-7 text-white/60">{item}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="rounded-[28px] border border-white/10 bg-black/20 p-6">
+                <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/40">
+                  Built for the full pass
+                </p>
+                <div className="mt-5 grid gap-4">
+                  {pillars.map(({ label, value }) => (
+                    <div
+                      key={label}
+                      className="rounded-2xl border border-white/8 bg-white/[0.04] p-4"
+                    >
+                      <p className="text-sm font-semibold text-white">{label}</p>
+                      <p className="mt-2 text-sm leading-6 text-white/48">
+                        {value}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
             </div>
           </section>
 
           <section className="animate-slide-up">
             <div
-              className="rounded-[28px] p-6 sm:p-7"
+              className="rounded-[32px] p-6 sm:p-7"
               style={{
-                background: "rgba(12, 12, 18, 0.82)",
+                background:
+                  "linear-gradient(180deg, rgba(14, 16, 24, 0.94) 0%, rgba(9, 10, 16, 0.9) 100%)",
                 backdropFilter: "blur(24px)",
                 WebkitBackdropFilter: "blur(24px)",
                 border: "1px solid rgba(255, 255, 255, 0.12)",
@@ -184,46 +265,42 @@ export default function RootPage() {
               <div className="flex items-start justify-between gap-4">
                 <div>
                   <p className="text-xs font-semibold uppercase tracking-[0.24em] text-white/35">
-                    Sign in
+                    Welcome back
                   </p>
                   <h2 className="mt-3 text-2xl font-semibold text-white">
-                    Enter your studio session
+                    Enter FashionAI Studio
                   </h2>
                 </div>
-
-                <span className="rounded-full border border-purple-500/20 bg-purple-500/12 px-3 py-1 text-[10px] font-bold uppercase tracking-[0.16em] text-purple-300">
-                  Beta
-                </span>
               </div>
 
               <p className="mt-4 text-sm leading-7 text-white/45">
-                Your access is ready. Sign in below to open the recording flow
-                and start testing style transformations right away.
+                Your workspace is ready. Continue into the camera studio to
+                record, direct, and review a new look in one pass.
               </p>
 
               <div
-                className="mt-6 rounded-2xl border border-white/10 bg-white/[0.06] p-5"
+                className="mt-6 rounded-[26px] border border-white/10 bg-[linear-gradient(180deg,rgba(255,255,255,0.08),rgba(255,255,255,0.04))] p-5"
                 role="region"
-                aria-label="Beta access"
+                aria-label="Studio access"
               >
                 <div className="flex items-center gap-3">
                   <div
-                    className="w-11 h-11 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0"
+                    className="flex h-11 w-11 flex-shrink-0 items-center justify-center rounded-full text-sm font-bold text-white"
                     style={{
                       background:
-                        "linear-gradient(135deg, #a855f7 0%, #ec4899 100%)",
+                        "linear-gradient(135deg, #ec6a4f 0%, #d96aa7 58%, #1d5e8d 100%)",
                     }}
                     aria-hidden="true"
                   >
                     {user.name.charAt(0)}
                   </div>
                   <div>
-                    <p className="text-white text-sm font-semibold leading-tight">
+                    <p className="text-sm font-semibold leading-tight text-white">
                       {user.name}
                     </p>
-                    <p className="text-white/40 text-xs capitalize">
-                      {user.role.replace("_", " ")} ·{" "}
-                      <span className="text-purple-400/80 font-mono text-[11px]">
+                    <p className="text-xs capitalize text-white/40">
+                      {user.role.replace("_", " ")} •{" "}
+                      <span className="font-mono text-[11px] text-[#ffb08d]">
                         {user.id}
                       </span>
                     </p>
@@ -233,13 +310,20 @@ export default function RootPage() {
                 <div className="mt-5 grid gap-3 sm:grid-cols-2">
                   {[
                     "5-second guided recording",
-                    "Prompt-driven look generation",
-                    "Fast retake and review flow",
-                    "Built for private testing",
+                    "Prompt-led styling direction",
+                    "Live before-and-after review",
+                    "Polished studio session flow",
                   ].map((item) => (
-                    <div key={item} className="flex items-center gap-2 text-sm text-white/58">
+                    <div
+                      key={item}
+                      className="flex items-center gap-2 text-sm text-white/58"
+                    >
                       <span
-                        className="h-2 w-2 rounded-full bg-gradient-to-r from-purple-400 to-pink-400"
+                        className="h-2 w-2 rounded-full"
+                        style={{
+                          background:
+                            "linear-gradient(135deg, #ff9f7b 0%, #d96aa7 60%, #7ec5ff 100%)",
+                        }}
                         aria-hidden="true"
                       />
                       <span>{item}</span>
@@ -248,32 +332,53 @@ export default function RootPage() {
                 </div>
               </div>
 
+              <div className="mt-5 rounded-[24px] border border-white/8 bg-black/20 p-4">
+                <p className="text-xs font-semibold uppercase tracking-[0.2em] text-white/36">
+                  Session view
+                </p>
+                <div className="mt-4 grid gap-3 sm:grid-cols-3">
+                  {[
+                    ["01", "Record"],
+                    ["02", "Describe"],
+                    ["03", "Review"],
+                  ].map(([step, label]) => (
+                    <div
+                      key={step}
+                      className="rounded-2xl border border-white/8 bg-white/[0.04] px-4 py-3"
+                    >
+                      <p className="text-xs font-mono text-white/35">{step}</p>
+                      <p className="mt-2 text-sm font-semibold text-white/82">
+                        {label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
               <button
                 onClick={handleLogin}
                 disabled={isLoggingIn}
-                aria-label="Log in as Peter Macdonald"
+                aria-label="Enter FashionAI Studio as Peter Macdonald"
                 className="
-                  relative mt-6 w-full flex items-center justify-center gap-3
-                  px-6 py-4 rounded-2xl
-                  text-white font-semibold text-base tracking-wide
-                  transition-all duration-200
-                  active:scale-[0.98]
-                  disabled:opacity-60 disabled:cursor-not-allowed
-                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-purple-400 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]
-                  overflow-hidden
+                  relative mt-6 flex w-full items-center justify-center gap-3 overflow-hidden
+                  rounded-2xl px-6 py-4 text-base font-semibold tracking-wide text-white
+                  transition-all duration-200 active:scale-[0.98]
+                  disabled:cursor-not-allowed disabled:opacity-60
+                  focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#ff9f7b]
+                  focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--background)]
                 "
                 style={{
                   background:
-                    "linear-gradient(135deg, #7c3aed 0%, #a855f7 40%, #ec4899 100%)",
+                    "linear-gradient(135deg, #ec6a4f 0%, #d96aa7 48%, #1d5e8d 100%)",
                   boxShadow:
-                    "0 8px 32px rgba(168, 85, 247, 0.45), 0 2px 8px rgba(0,0,0,0.3)",
+                    "0 10px 36px rgba(217, 106, 167, 0.3), 0 2px 8px rgba(0,0,0,0.3)",
                 }}
               >
                 <span
-                  className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+                  className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 hover:opacity-100"
                   style={{
                     background:
-                      "linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)",
+                      "linear-gradient(135deg, rgba(255,255,255,0.12) 0%, transparent 50%, rgba(255,255,255,0.05) 100%)",
                   }}
                   aria-hidden="true"
                 />
@@ -281,10 +386,10 @@ export default function RootPage() {
                 {isLoggingIn ? (
                   <>
                     <span
-                      className="w-4 h-4 rounded-full border-2 border-white/30 border-t-white animate-spin"
+                      className="h-4 w-4 rounded-full border-2 border-white/30 border-t-white animate-spin"
                       aria-hidden="true"
                     />
-                    <span>Entering Studio…</span>
+                    <span>Opening Studio...</span>
                   </>
                 ) : (
                   <>
@@ -295,21 +400,22 @@ export default function RootPage() {
                       strokeWidth={2}
                       strokeLinecap="round"
                       strokeLinejoin="round"
-                      className="w-5 h-5 flex-shrink-0"
+                      className="h-5 w-5 flex-shrink-0"
                       aria-hidden="true"
                     >
                       <circle cx="7.5" cy="15.5" r="4.5" />
                       <path d="m21 2-9.6 9.6" />
                       <path d="m15.5 7.5 3 3L22 7l-3-3" />
                     </svg>
-                    <span>Log In as Peter</span>
+                    <span>Continue as Peter</span>
                   </>
                 )}
               </button>
 
               <p className="mt-5 rounded-2xl border border-white/8 bg-black/20 px-4 py-3 text-xs leading-6 text-white/34">
-                This is a private demo environment with mock sign-in. Once you
-                enter, you&apos;ll go straight into the camera studio.
+                Entering the studio takes you directly into recording and style
+                direction so you can move from first capture to review without
+                setup steps in between.
               </p>
             </div>
           </section>
