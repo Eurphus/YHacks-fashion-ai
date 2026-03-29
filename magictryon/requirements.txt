@@ -149,7 +149,7 @@ omegaconf==2.3.0
 onnxruntime==1.22.0
 opencv-python==4.11.0.86
 opencv-python-headless==4.11.0.86
-orjson==3.10.16
+orjson==3.11.6
 overrides==7.7.0
 packaging
 pandas==2.2.3
